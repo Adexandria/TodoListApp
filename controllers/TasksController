@@ -1,0 +1,36 @@
+const Tasks = require('../models/tasks').Tasks;
+var Repository = {};
+
+ Repository.GetAllTasks = (done)=>{
+    Tasks.find((err,data)=>{
+        if(err) return(err);
+        done(null,data);
+    });
+};
+
+ Repository.CreateTask = (newtask,done)=>{
+    newtask.timestamp = new Date();
+    Tasks.create(newtask,(err,data)=>
+    {
+        if(err) return err;
+        done(null,data);
+    });
+
+};
+
+Repository.UpdateTaskById = (id,task,done)=>{
+    task.timestamp = new Date();
+    Tasks.updateOne({ _id:id},{ $set : task},(err,data)=>{
+        if(err) return err;
+        done(null,data);
+    });
+};
+
+Repository.DeleteTaskById = (id,done)=>{
+    Tasks.findByIdAndRemove(id,(err,data)=>{
+        if(err) return err;
+        done(null,data);
+    });
+};
+
+module.exports = Repository;
